@@ -6,76 +6,51 @@
   <meta name="theme-color" content="#f6f8fa">
   <title>Crimpdeq Data Visualizer</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
   <script type="module" src="app.js"></script>
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a class="brand" href="./" aria-label="Crimpdeq Data Visualizer home">
-        <span class="brand-icon" aria-hidden="true">⌁</span>
-        <span>Crimpdeq <span class="brand-muted">/</span> Data Visualizer</span>
-      </a>
-      <span class="topbar-label">TRAINING DASHBOARD</span>
-    </div>
-  </header>
-
   <main class="container">
-    <div class="page-heading">
-      <div>
-        <div class="eyebrow"><span class="eyebrow-dot"></span> LIVE SESSION</div>
-        <h1>Strength, in numbers.</h1>
-        <p>Connect your device and see every pull in real time.</p>
-      </div>
+    <header class="toolbar">
       <div class="connection">
         <span id="connection-status" class="status"><span class="status-dot"></span><span id="status-text">Not connected</span></span>
-        <button id="connect" class="button button-outline" type="button">Connect device</button>
-      </div>
-    </div>
-
-    <div id="notice" class="notice" role="status">Connect a Crimpdeq or Tindeq Progressor to get started.</div>
-
-    <section class="dashboard" aria-label="Session dashboard">
-      <div class="section-heading">
-        <div><h2>Session overview</h2><p>Your live force measurements, in kilograms.</p></div>
-        <button id="start" class="button button-primary" type="button" disabled><span aria-hidden="true">▶</span> Tare &amp; start</button>
-      </div>
-
-      <div class="metrics">
-        <article class="metric metric-current">
-          <div class="metric-label">CURRENT MEASUREMENT <span class="live-pill">LIVE</span></div>
-          <div class="metric-value"><span id="current">—</span><span class="unit">kg</span></div>
-          <div class="metric-caption">Force right now</div>
-        </article>
-        <article class="metric metric-current">
-          <div class="metric-label">CURRENT 5-SEC MEAN</div>
-          <div class="metric-value"><span id="mean">—</span><span class="unit">kg</span></div>
-          <div class="metric-caption">Rolling average</div>
-        </article>
-        <article class="metric">
-          <div class="metric-label">MAX MEASUREMENT</div>
-          <div class="metric-value"><span id="maximum">—</span><span class="unit">kg</span></div>
-          <div class="metric-caption">Best this session</div>
-        </article>
-        <article class="metric">
-          <div class="metric-label">MAX 5-SEC MEAN</div>
-          <div class="metric-value"><span id="max-mean">—</span><span class="unit">kg</span></div>
-          <div class="metric-caption">Best sustained effort</div>
-        </article>
-      </div>
-
-      <section class="chart-card" aria-labelledby="chart-title">
-        <div class="chart-heading">
-          <div><h2 id="chart-title">Session activity</h2><p>Force over time</p></div>
-          <span class="chart-key"><span></span> Force (kg)</span>
+        <span id="battery-status" class="battery-status" aria-live="polite" hidden></span>
+        <div class="connection-actions">
+          <button id="connect" class="button button-outline" type="button">Connect device</button>
         </div>
-        <div class="chart-wrap">
-          <canvas id="chart" role="img" aria-label="Session force in kilograms over time"></canvas>
-          <div id="chart-empty" class="chart-empty"><span class="empty-icon">⌁</span><strong>Ready when you are</strong><span>Your session graph will appear here.</span></div>
-        </div>
-        <div class="chart-footer"><span>0:00</span><span>TIME ELAPSED</span><span id="elapsed">0:00</span></div>
-      </section>
+      </div>
+      <div class="session-actions">
+        <button id="tare" class="button button-outline" type="button" disabled>Tare</button>
+        <button id="start" class="button button-primary" type="button" disabled>Start</button>
+        <button id="stop" class="button button-outline" type="button" disabled>Stop</button>
+      </div>
+    </header>
+
+    <div id="notice" class="notice" role="status" hidden></div>
+
+    <section class="metrics" aria-label="Live measurements">
+      <article class="metric">
+        <div class="metric-label">CURRENT MEASUREMENT</div>
+        <div class="metric-value"><span id="current">—</span><span class="unit">kg</span></div>
+        <div class="metric-peak"><span>MAX</span><strong id="maximum">—</strong><span class="unit">kg</span></div>
+      </article>
+      <article class="metric">
+        <div class="metric-label">CURRENT 5-SEC MEAN</div>
+        <div class="metric-value"><span id="mean">—</span><span class="unit">kg</span></div>
+        <div class="metric-peak"><span>MAX</span><strong id="max-mean">—</strong><span class="unit">kg</span></div>
+      </article>
     </section>
-    <footer><span>Crimpdeq Data Visualizer</span><span>Built for your next personal best.</span></footer>
+
+    <section class="chart-card" aria-label="Session chart">
+      <div class="chart-legend" aria-hidden="true">
+        <span><i class="legend-marker legend-maximum"></i>MAX</span>
+        <span><i class="legend-marker legend-mean"></i>MAX 5s</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chart" role="img" aria-label="Force over time. Red marker is the maximum reading; shaded range is the highest five-second mean window."></canvas>
+      </div>
+      <div class="chart-footer"><span id="elapsed" aria-label="Elapsed time">0:00</span></div>
+    </section>
   </main>
 </body>
 </html>
